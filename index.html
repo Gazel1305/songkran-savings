@@ -7,63 +7,79 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Kanit', sans-serif; background-color: #f8f9fa; }
-        .card-custom { border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .number-display { font-size: 3rem; font-weight: bold; color: #dc3545; }
-        .countdown-box { background: #0d6efd; color: white; padding: 15px; border-radius: 10px; margin-top: 20px; }
+        body { font-family: 'Kanit', sans-serif; background-color: #f0f2f5; }
+        .card-custom { border-radius: 16px; box-shadow: 0 10px 20px rgba(0,0,0,0.08); border: none; }
+        .number-display { font-size: 3.5rem; font-weight: 700; color: #dc3545; line-height: 1; }
+        .countdown-box { background: linear-gradient(135deg, #0d6efd, #0099ff); color: white; padding: 20px; border-radius: 16px; margin-top: 20px; box-shadow: 0 4px 15px rgba(13, 110, 253, 0.4); }
+        .btn-xl { padding: 15px; font-size: 1.2rem; border-radius: 12px; }
+        .chart-container { position: relative; height: 300px; width: 100%; }
     </style>
 </head>
 <body>
 
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6 text-center">
-            
-            <h1 class="mb-4">ภารกิจพิชิต 100,000 บาท 💸</h1>
+<div class="container py-5" style="max-width: 600px;">
+    
+    <div class="text-center mb-4">
+        <h2 class="fw-bold">🚀 ภารกิจ 100,000 บาท</h2>
+        <p class="text-muted">เก็บตังค์เที่ยวสงกรานต์</p>
+    </div>
 
-            <div class="card card-custom p-4 mb-4 bg-white">
-                <p class="text-muted">เหลือยอดที่ต้องทำอีก</p>
-                <div id="remainingAmount" class="number-display">Loading...</div>
-                <div class="progress mt-3" style="height: 25px;">
-                    <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style="width: 0%"></div>
-                </div>
-                <small class="text-muted mt-2">เก็บไปแล้ว: <span id="currentAmount">0</span> บาท</small>
-            </div>
-
-            <div class="countdown-box mb-4">
-                <h4>⏳ นับถอยหลังสู่วันสงกรานต์</h4>
-                <div id="countdown" class="fs-4 fw-bold">...</div>
-                <small>Deadline: 13 เมษายน 2569</small>
-            </div>
-
-            <div class="card card-custom p-4 bg-white">
-                <h5 class="mb-3">บันทึกรายการวันนี้</h5>
-                <form id="accountingForm">
-                    <div class="mb-3">
-                        <input type="number" class="form-control form-control-lg text-center" id="amount" placeholder="ระบุจำนวนเงิน" required>
-                    </div>
-                    <div class="d-flex gap-2 justify-content-center">
-                        <button type="button" onclick="submitData('income')" class="btn btn-success flex-grow-1">📈 กำไร (ลดเป้า)</button>
-                        <button type="button" onclick="submitData('expense')" class="btn btn-danger flex-grow-1">📉 ขาดทุน (เพิ่มเป้า)</button>
-                    </div>
-                </form>
-            </div>
-
+    <div class="card card-custom p-4 mb-4 bg-white text-center">
+        <p class="text-muted mb-1">เหลือยอดที่ต้องทำอีก</p>
+        <div id="remainingAmount" class="number-display">...</div>
+        
+        <div class="progress mt-4 mb-2" style="height: 10px; border-radius: 50px; background-color: #e9ecef;">
+            <div id="progressBar" class="progress-bar bg-success" role="progressbar" style="width: 0%; border-radius: 50px;"></div>
         </div>
+        <div class="d-flex justify-content-between text-muted small">
+            <span>เก็บได้: <b id="currentAmount" class="text-success">0</b></span>
+            <span>เป้าหมาย: <b>100,000</b></span>
+        </div>
+    </div>
+
+    <div class="card card-custom p-3 mb-4 bg-white">
+        <h6 class="text-muted mb-3">📊 ประวัติการเติบโต</h6>
+        <div class="chart-container">
+            <canvas id="savingsChart"></canvas>
+        </div>
+    </div>
+
+    <div class="countdown-box mb-4 text-center">
+        <h5 class="mb-2">⏳ เวลาที่เหลือ</h5>
+        <div id="countdown" class="fs-2 fw-bold">...</div>
+        <small style="opacity: 0.8;">Deadline: 13 เมษายน 2569</small>
+    </div>
+
+    <div class="card card-custom p-4 bg-white">
+        <h5 class="mb-3">วันนี้ทำยอดได้เท่าไหร่?</h5>
+        <form id="accountingForm">
+            <div class="mb-3">
+                <input type="number" class="form-control form-control-lg text-center" id="amount" placeholder="0.00" style="font-size: 1.5rem;" required>
+            </div>
+            <div class="d-flex gap-2">
+                <button type="button" onclick="submitData('income')" class="btn btn-success btn-xl flex-grow-1 shadow-sm">
+                    + กำไร
+                </button>
+                <button type="button" onclick="submitData('expense')" class="btn btn-danger btn-xl flex-grow-1 shadow-sm">
+                    - ขาดทุน
+                </button>
+            </div>
+        </form>
     </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <script>
     // **************************************************
-    // ⚠️ แก้ตรงนี้: เอา URL จาก Google Apps Script มาใส่
+    // ⚠️ ใส่ URL ใหม่ที่คุณเพิ่ง Deploy ล่าสุดตรงนี้
     // **************************************************
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyKf08WGBQ6CnVxg4l33fqV8UUlFf_CYYNM6ySP3bVjEnMWupbx3pbqzp7bv2jAdJ-T/exec'; 
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx2Wf-pF5Mu96Kpdli2uWTn3RUv3lTQfF9ios2BTdHZN4zZxCEui6TJ8MthWkJ25jrD/exec'; 
 
-    // ตั้งค่าวันเป้าหมาย (ปี ค.ศ.)
     const TARGET_DATE = new Date("April 13, 2026 00:00:00").getTime();
+    let myChart = null;
 
-    // โหลดข้อมูลเมื่อเข้าเว็บ
     window.onload = function() {
         updateDashboard();
         setInterval(updateCountdown, 1000);
@@ -72,34 +88,71 @@
     function updateCountdown() {
         const now = new Date().getTime();
         const distance = TARGET_DATE - now;
-
         if (distance < 0) {
-            document.getElementById("countdown").innerHTML = "หมดเวลาแล้ว!";
+            document.getElementById("countdown").innerHTML = "หมดเวลา!";
             return;
         }
-
         const days = Math.floor(distance / (1000 * 60 * 60 * 24));
         const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-        document.getElementById("countdown").innerHTML = `${days}วัน ${hours}ชม. ${minutes}นาที ${seconds}วิ`;
+        document.getElementById("countdown").innerHTML = `${days}ว ${hours}ช ${minutes}น ${seconds}วิ`;
     }
 
     function updateDashboard() {
         fetch(SCRIPT_URL)
         .then(response => response.json())
         .then(data => {
-            // Update ตัวเลข
-            document.getElementById('remainingAmount').innerText = data.remaining.toLocaleString() + " ฿";
+            // Update Text
+            document.getElementById('remainingAmount').innerText = data.remaining.toLocaleString();
             document.getElementById('currentAmount').innerText = data.current.toLocaleString();
             
-            // Update กราฟ
+            // Update Progress Bar
             const percent = (data.current / data.goal) * 100;
             document.getElementById('progressBar').style.width = percent + "%";
-            document.getElementById('progressBar').innerText = Math.round(percent) + "%";
+
+            // Update Chart
+            renderChart(data.history.labels, data.history.data);
         })
         .catch(error => console.error('Error:', error));
+    }
+
+    function renderChart(labels, dataPoints) {
+        const ctx = document.getElementById('savingsChart').getContext('2d');
+        
+        if (myChart) {
+            myChart.destroy(); // ล้างกราฟเก่าก่อนวาดใหม่
+        }
+
+        myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'ยอดเงินสะสม (บาท)',
+                    data: dataPoints,
+                    borderColor: '#198754', // สีเส้น (เขียว)
+                    backgroundColor: 'rgba(25, 135, 84, 0.1)', // สีเงาใต้เส้น
+                    borderWidth: 3,
+                    pointRadius: 3,
+                    pointBackgroundColor: '#fff',
+                    pointBorderColor: '#198754',
+                    fill: true,
+                    tension: 0.4 // ความโค้งของเส้น
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false } // ซ่อน Legend เพื่อความมินิมอล
+                },
+                scales: {
+                    x: { grid: { display: false } }, // ซ่อนเส้นตารางแนวตั้ง
+                    y: { beginAtZero: true }
+                }
+            }
+        });
     }
 
     function submitData(type) {
@@ -108,7 +161,7 @@
 
         Swal.fire({
             title: 'กำลังบันทึก...',
-            allowOutsideClick: false,
+            timerProgressBar: true,
             didOpen: () => { Swal.showLoading() }
         });
 
@@ -118,12 +171,17 @@
         })
         .then(response => response.json())
         .then(data => {
-            Swal.fire('เรียบร้อย!', 'บันทึกข้อมูลแล้ว', 'success');
+            Swal.fire({
+                icon: 'success',
+                title: 'เรียบร้อย!',
+                showConfirmButton: false,
+                timer: 1500
+            });
             document.getElementById('accountingForm').reset();
-            updateDashboard(); // โหลดเลขใหม่ทันที
+            updateDashboard(); 
         })
         .catch(error => {
-            Swal.fire('แย่แล้ว', 'เกิดข้อผิดพลาด ลองใหม่อีกครั้ง', 'error');
+            Swal.fire('Oops...', 'เกิดข้อผิดพลาด', 'error');
         });
     }
 </script>
